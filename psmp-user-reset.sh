@@ -4,8 +4,7 @@
 #The password for the accounts will still need to be changed making use of the PriverArk Client.
 #The server will pick up the hostname of the server placing that in the required place in the command to reset the password.
 #All accounts will have their password changed in the default location.
-#Make the required changes if the server is running RHEL8 / CentOS /Rocky Linux
-#works with CyberArk 12.x
+#Make the required changes if the server is running RHEL8
 #Script is written by Andrew 
 #email dru0pa@gmail.com
 
@@ -32,14 +31,25 @@ HN3=`cat PSMPGW.txt`
 echo Type the password that will be used by all the accounts
 read pass
 #setting the password for the below accounts
-/opt/CARKpsmp/bin/createcredfile /etc/opt/CARKpsmpadb/vault/psmpadbridgeserveruser.cred Password -Username $HN1 -Password $pass -EntropyFile
-/opt/CARKpsmp/bin/createcredfile /etc/opt/CARKpsmp/vault/psmpappuser.cred Password -Username $HN2 -Password $pass -EntropyFile
-/opt/CARKpsmp/bin/createcredfile /etc/opt/CARKpsmp/vault/psmpgwuser.cred  Password -Username $HN3 -Password $pass -EntropyFile
+/opt/CARKpsmp/bin/createcredfile psmpadbridgeserveruser.cred Password -Username $HN1 -Password $pass -EntropyFile
+/opt/CARKpsmp/bin/createcredfile psmpappuser.cred Password -Username $HN2 -Password $pass -EntropyFile
+/opt/CARKpsmp/bin/createcredfile psmpgwuser.cred Password -Username $HN3 -Password $pass -EntropyFile
+
+mv -f psmpadbridgeserveruser.cred /etc/opt/CARKpsmpadb/vault/
+mv -f psmpadbridgeserveruser.cred.entropy /etc/opt/CARKpsmpadb/vault/
+mv -f psmpappuser.cred /etc/opt/CARKpsmp/vault/
+mv -f psmpappuser.cred.entropy /etc/opt/CARKpsmp/vault/
+mv -f psmpgwuser.cred /etc/opt/CARKpsmp/vault/
+mv -f psmpgwuser.cred.entropy /etc/opt/CARKpsmp/vault/
+
 #Checking the files were updated with new time stamps
 echo ls of the files to see if there was a change
 ls -lsh /etc/opt/CARKpsmpadb/vault/psmpadbridgeserveruser.cred
+ls -lsh /etc/opt/CARKpsmpadb/vault/psmpadbridgeserveruser.cred.entropy
 ls -lsh /etc/opt/CARKpsmp/vault/psmpappuser.cred
+ls -lsh /etc/opt/CARKpsmp/vault/psmpappuser.cred.entropy
 ls -lsh /etc/opt/CARKpsmp/vault/psmpgwuser.cred
+ls -lsh /etc/opt/CARKpsmp/vault/psmpgwuser.cred.entropy
 #Checking the files where updated content
 echo catting the files
 cat /etc/opt/CARKpsmpadb/vault/psmpadbridgeserveruser.cred
